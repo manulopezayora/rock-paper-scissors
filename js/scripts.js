@@ -33,7 +33,7 @@ const printGame = () => {
     tokenElement.classList.add("token", `${token.name}`)
     tokenElement.innerHTML = `
       <div class="token-outline-top">
-      <img src="../images/icon-${token.name}.svg" alt="icon for play" />
+      <img src="../images/icon-${token.name}.svg" alt="icon for play" data-value="${token.name}" />
       </div>
     `
 
@@ -45,10 +45,10 @@ const printGame = () => {
   app.append(fragment)
 }
 
-const startGame = () => {}
-
-// Traer el valor del session storage
-// const token = JSON.parse(sessionStorage.getItem("token"))
+const playGame = () => {
+  // Traer el valor del session storage
+  // const token = JSON.parse(sessionStorage.getItem("token"))
+}
 
 // * EVENTS
 
@@ -65,7 +65,12 @@ form.addEventListener("submit", (e) => {
   const rounds = parseInt(e.target[0].value)
   setRounds(rounds)
   renderApp()
-  startGame()
+  playGame()
+})
+
+app.addEventListener("click", (e) => {
+  const target = e.target.dataset.value
+  console.log(target)
 })
 
 window.addEventListener("load", renderApp())

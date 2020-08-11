@@ -73,33 +73,34 @@
 
 .app {
   width: 100%;
-
-  border: 1px solid red;
 }
 
 .table {
-  height: 500px;
+  height: auto;
   background-image: url("../images/bg-triangle.svg");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 100%; /* Cambiar este valor para adaptar */
+  background-size: 60%; /* Cambiar este valor para adaptar */
 
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .token {
-  width: 130px;
+  margin: 12px;
   height: 130px;
+  width: 130px;
   background-color: var(--light);
   border: 15px solid;
   border-radius: 50%;
   display: flex;
   cursor: pointer;
+  transition: 0.02s;
 }
 
 .token-outline-top {
-  box-shadow: 0 -5px 0 #d0d0d0;
+  box-shadow: 0 -4px 0 #d0d0d0;
   display: flex;
   justify-content: center;
   align-items: center;
