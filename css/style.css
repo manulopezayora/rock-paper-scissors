@@ -75,6 +75,13 @@
   width: 100%;
 }
 
+.countdown {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .table {
   height: auto;
   background-image: url("../images/bg-triangle.svg");
