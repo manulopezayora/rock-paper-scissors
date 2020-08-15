@@ -94,6 +94,10 @@
   justify-content: center;
 }
 
+.tableVS {
+  background-image: none;
+}
+
 .token {
   margin: 12px;
   height: 130px;
@@ -118,6 +122,36 @@
 
 .token:active {
   transform: scale(0.9);
+}
+
+.round-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.result-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.result {
+  text-align: center;
+}
+
+.final-msg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.link-btn {
+  margin-top: 2em;
+  text-decoration: none;
+  text-align: center;
+  color: var(--light-text);
 }
 
 .paper {

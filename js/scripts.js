@@ -1,15 +1,24 @@
 // * DOM
 const app = document.getElementById("app")
 const form = document.getElementById("form")
+const userScoreValue = document.getElementById("user-score-value")
+const cpuScoreValue = document.getElementById("cpu-score-value")
 const rulesModal = document.getElementById("rules-modal")
 const rules = document.getElementById("rules")
 
 // * GLOBALS
 let userIsActive = false
 let selectedRounds = 0
-let humanScore = 0
+let currentRound = 0
+let userScore = 0
 let cpuScore = 0
-const tokens = [{ name: "paper" }, { name: "scissors" }, { name: "rock" }]
+let userPlay = null
+let cpuPlay = null
+const tokens = [
+  { name: "paper", value: 0 },
+  { name: "scissors", value: 1 },
+  { name: "rock", value: 2 },
+]
 const result = [
   [0, 1, 2],
   [2, 0, 1],
@@ -19,9 +28,14 @@ const result = [
 // * FUNCTIONS
 
 const renderApp = () => {
-  // ! cambiar a true!!!
-  if (userIsActive === true) printGame()
-  else form.classList.remove("hidden")
+  userScoreValue.textContent = userScore
+  cpuScoreValue.textContent = cpuScore
+  if (userIsActive === true) {
+    printGame()
+    // ! userRandomPlay()
+  } else {
+    form.classList.remove("hidden")
+  }
 }
 
 const setRounds = (rounds) => {
@@ -36,9 +50,8 @@ const timer = () => {
     selectTime--
     if (selectTime < 1) {
       clearInterval(interval)
-      countdownElement.innerHTML = "Finished time"
     }
-    const time = `Chose you're play: ${selectTime} seconds`
+    const time = `Chose your play: ${selectTime} seconds`
     countdownElement.innerHTML = time
   }, 1000)
 }
@@ -48,19 +61,17 @@ const printGame = () => {
   const fragment = document.createDocumentFragment()
   const table = document.createElement("SECTION")
   table.classList.add("table")
-
   const countdown = document.createElement("span")
   countdown.classList.add("countdown")
   countdown.setAttribute("id", "countdown")
-  countdown.textContent = "Chose you're play: 5 seconds"
-
+  countdown.textContent = "Chose your play: 5 seconds"
   tokens.map((token) => {
     const tokenElement = document.createElement("DIV")
     tokenElement.classList.add("token", token.name)
-    tokenElement.setAttribute("data-value", token.name)
+    tokenElement.setAttribute("data-value", token.value)
     tokenElement.innerHTML = `
-      <div class="token-outline-top">
-      <img src="../images/icon-${token.name}.svg" alt="icon for play" />
+      <div class="token-outline-top" data-value="${token.value}">
+      <img src="../images/icon-${token.name}.svg" alt="icon for play" data-value="${token.value}" />
       </div>
     `
     table.append(tokenElement)
@@ -68,14 +79,117 @@ const printGame = () => {
   fragment.append(countdown, table)
   app.append(fragment)
   timer()
+  userRandomPlay()
 }
 
-const playRound = () => {
-  let currentRound = 0
-  while (currentRound < selectedRounds) {
-    currentRound++
-    console.log(selectedRounds, currentRound)
+const userRandomPlay = () => {
+  setTimeout(() => {
+    if (userPlay === null) {
+      userPlay = Math.round(Math.random() * 2)
+      playRound(userPlay)
+    }
+  }, 5000)
+}
+
+const cpuRandomPlay = () => (cpuPlay = Math.round(Math.random() * 2))
+
+const nextRound = () => {
+  app.innerHTML = ""
+  userPlay = null
+  let winner = false
+
+  if (userScore > selectedRounds / 2) {
+    winner = true
+    app.innerHTML = `
+       <div class="final-msg">
+         <h2>End Game</h2>
+         <h3>you won the game</h3>
+         <a href="index.html" class="btn link-btn">Play Again?</a>
+       </div>
+       `
   }
+
+  if (cpuScore > selectedRounds / 2) {
+    winner = true
+    app.innerHTML = `
+         <div class="final-msg">
+         <h2>End Game</h2>
+         <h3>you lost the game</h3>
+         <a href="index.html" class="btn link-btn">Play Again?</a>
+       </div>
+         `
+  }
+
+  if (currentRound < selectedRounds && winner === false) {
+    renderApp()
+  }
+}
+
+const setRound = (userToken) => {
+  const user = tokens[userToken].value
+  const cpu = tokens[cpuPlay].value
+  const roundResult = result[user][cpu]
+  let roundResultInfo
+  switch (roundResult) {
+    case 0:
+      roundResultInfo = "Round tied"
+      renderApp()
+      break
+    case 1:
+      roundResultInfo = "Round loss"
+      cpuScore += 1
+      currentRound += 1
+      renderApp()
+      break
+    case 2:
+      roundResultInfo = "Round won"
+      userScore += 1
+      currentRound += 1
+      renderApp()
+      break
+
+    default:
+      break
+  }
+  app.innerHTML = ""
+  const fragment = document.createDocumentFragment()
+  const table = document.createElement("SECTION")
+  table.classList.add("table", "tableVS")
+  const userTokenElement = document.createElement("DIV")
+  userTokenElement.classList.add("token", tokens[userToken].name, "token-game")
+  userTokenElement.innerHTML = `
+      <div class="token-outline-top">
+      <img src="../images/icon-${tokens[userToken].name}.svg" alt="icon for play" />
+      </div>
+    `
+  const cpuTokenElement = document.createElement("DIV")
+  cpuTokenElement.classList.add("token", tokens[cpuPlay].name, "token-game")
+  cpuTokenElement.innerHTML = `
+      <div class="token-outline-top">
+      <img src="../images/icon-${tokens[cpuPlay].name}.svg" alt="icon for play" />
+      </div>
+    `
+  table.append(userTokenElement, cpuTokenElement)
+  const roundInfo = document.createElement("DIV")
+  roundInfo.classList.add("round-info")
+  roundInfo.innerHTML = `
+    <span>You picked</span>
+    <span>cpu picked</span>
+  `
+  const resultInfo = document.createElement("DIV")
+  resultInfo.classList.add("result-info")
+  resultInfo.innerHTML = `
+    <h2 class="result">${roundResultInfo}</h2>
+    <button onclick="nextRound()" class="btn">Next Round</button>
+  `
+  fragment.append(table, roundInfo, resultInfo)
+  app.append(fragment)
+}
+
+const playRound = (target) => {
+  cpuRandomPlay()
+  setRound(target, cpuPlay)
+  if (userPlay != null) userRandomPlay()
 }
 
 // * EVENTS
@@ -93,13 +207,14 @@ form.addEventListener("submit", (e) => {
   const rounds = parseInt(e.target[0].value)
   setRounds(rounds)
   renderApp()
-  playRound()
 })
 
 app.addEventListener("click", (e) => {
-  const target = e.target.dataset.value
-  if (target === "rock" || target === "paper" || target === "scissors")
-    console.log(target)
+  const target = parseInt(e.target.dataset.value)
+  if (target === 0 || target === 1 || target === 2) {
+    playRound(target)
+    userPlay = target
+  }
 })
 
 window.addEventListener("load", renderApp())
