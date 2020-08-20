@@ -14,6 +14,7 @@ let userScore = 0
 let cpuScore = 0
 let userPlay = null
 let cpuPlay = null
+let winner = false
 const tokens = [
   { name: "paper", value: 0 },
   { name: "scissors", value: 1 },
@@ -32,7 +33,7 @@ const renderApp = () => {
   cpuScoreValue.textContent = cpuScore
   if (userIsActive === true) {
     printGame()
-    // ! userRandomPlay()
+    userRandomPlay()
   } else {
     form.classList.remove("hidden")
   }
@@ -48,8 +49,10 @@ const timer = () => {
   let selectTime = 5
   const interval = setInterval(() => {
     selectTime--
-    if (selectTime < 1) {
+    if (selectTime <= 0) {
       clearInterval(interval)
+      selectTime = 5
+      console.log(selectTime)
     }
     const time = `Chose your play: ${selectTime} seconds`
     countdownElement.innerHTML = time
@@ -79,14 +82,16 @@ const printGame = () => {
   fragment.append(countdown, table)
   app.append(fragment)
   timer()
-  userRandomPlay()
+  //! userRandomPlay()
 }
 
 const userRandomPlay = () => {
-  setTimeout(() => {
+  const timeout = setTimeout(() => {
     if (userPlay === null) {
       userPlay = Math.round(Math.random() * 2)
       playRound(userPlay)
+      clearTimeout(timeout)
+      // ! console.log(timeout)
     }
   }, 5000)
 }
@@ -96,13 +101,12 @@ const cpuRandomPlay = () => (cpuPlay = Math.round(Math.random() * 2))
 const nextRound = () => {
   app.innerHTML = ""
   userPlay = null
-  let winner = false
 
   if (userScore > selectedRounds / 2) {
     winner = true
     app.innerHTML = `
        <div class="final-msg">
-         <h2>End Game</h2>
+         <h2>Congratulations!</h2>
          <h3>you won the game</h3>
          <a href="index.html" class="btn link-btn">Play Again?</a>
        </div>
@@ -113,15 +117,17 @@ const nextRound = () => {
     winner = true
     app.innerHTML = `
          <div class="final-msg">
-         <h2>End Game</h2>
+         <h2>Game Over</h2>
          <h3>you lost the game</h3>
          <a href="index.html" class="btn link-btn">Play Again?</a>
        </div>
          `
   }
 
-  if (currentRound < selectedRounds && winner === false) {
-    renderApp()
+  if (currentRound < selectedRounds) {
+    if (winner === false) {
+      renderApp()
+    }
   }
 }
 
