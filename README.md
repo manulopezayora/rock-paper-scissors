@@ -8,6 +8,8 @@ Diseño de front end mentor modificado para cumplir con los requisitos de Dorian
 
 [Frontend Mentor](https://www.frontendmentor.io)
 
+El diseño esta sacado de https://www.frontendmentor.io y lo he modificado en función de mis necesidades para cumplir con los requisitos.
+
 ## El reto
 
 Consiste en hacer una aplicación del juego de piedra, papel o tijeras.
