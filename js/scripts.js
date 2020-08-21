@@ -73,7 +73,7 @@ const printGame = () => {
     tokenElement.setAttribute("data-value", token.value)
     tokenElement.innerHTML = `
       <div class="token-outline-top" data-value="${token.value}">
-      <img src="../images/icon-${token.name}.svg" alt="icon for play" data-value="${token.value}" />
+      <img src="./images/icon-${token.name}.svg" alt="icon for play" data-value="${token.value}" />
       </div>
     `
     table.append(tokenElement)
@@ -156,14 +156,14 @@ const setRound = (userToken) => {
   userTokenElement.classList.add("token", tokens[userToken].name, "token-game")
   userTokenElement.innerHTML = `
       <div class="token-outline-top">
-      <img src="../images/icon-${tokens[userToken].name}.svg" alt="icon for play" />
+      <img src="./images/icon-${tokens[userToken].name}.svg" alt="icon for play" />
       </div>
     `
   const cpuTokenElement = document.createElement("DIV")
   cpuTokenElement.classList.add("token", tokens[cpuPlay].name, "token-game")
   cpuTokenElement.innerHTML = `
       <div class="token-outline-top">
-      <img src="../images/icon-${tokens[cpuPlay].name}.svg" alt="icon for play" />
+      <img src="./images/icon-${tokens[cpuPlay].name}.svg" alt="icon for play" />
       </div>
     `
   table.append(userTokenElement, cpuTokenElement)
