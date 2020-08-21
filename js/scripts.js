@@ -33,7 +33,7 @@ const renderApp = () => {
   cpuScoreValue.textContent = cpuScore
   if (userIsActive === true) {
     printGame()
-    userRandomPlay()
+    setTimeout(userRandomPlay, 5000)
   } else {
     form.classList.remove("hidden")
   }
@@ -52,7 +52,6 @@ const timer = () => {
     if (selectTime <= 0) {
       clearInterval(interval)
       selectTime = 5
-      console.log(selectTime)
     }
     const time = `Chose your play: ${selectTime} seconds`
     countdownElement.innerHTML = time
@@ -82,18 +81,13 @@ const printGame = () => {
   fragment.append(countdown, table)
   app.append(fragment)
   timer()
-  //! userRandomPlay()
 }
 
 const userRandomPlay = () => {
-  const timeout = setTimeout(() => {
-    if (userPlay === null) {
-      userPlay = Math.round(Math.random() * 2)
-      playRound(userPlay)
-      clearTimeout(timeout)
-      // ! console.log(timeout)
-    }
-  }, 5000)
+  if (userPlay === null) {
+    userPlay = Math.round(Math.random() * 2)
+    playRound(userPlay)
+  }
 }
 
 const cpuRandomPlay = () => (cpuPlay = Math.round(Math.random() * 2))
@@ -104,6 +98,7 @@ const nextRound = () => {
 
   if (userScore > selectedRounds / 2) {
     winner = true
+    userPlay = 0
     app.innerHTML = `
        <div class="final-msg">
          <h2>Congratulations!</h2>
@@ -111,10 +106,9 @@ const nextRound = () => {
          <a href="index.html" class="btn link-btn">Play Again?</a>
        </div>
        `
-  }
-
-  if (cpuScore > selectedRounds / 2) {
+  } else if (cpuScore > selectedRounds / 2) {
     winner = true
+    userPlay = 0
     app.innerHTML = `
          <div class="final-msg">
          <h2>Game Over</h2>
@@ -122,9 +116,7 @@ const nextRound = () => {
          <a href="index.html" class="btn link-btn">Play Again?</a>
        </div>
          `
-  }
-
-  if (currentRound < selectedRounds) {
+  } else if (currentRound <= selectedRounds) {
     if (winner === false) {
       renderApp()
     }
