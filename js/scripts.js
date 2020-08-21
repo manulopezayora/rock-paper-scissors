@@ -87,6 +87,8 @@ const userRandomPlay = () => {
   if (userPlay === null) {
     userPlay = Math.round(Math.random() * 2)
     playRound(userPlay)
+  } else {
+    console.warn(userPlay)
   }
 }
 
@@ -131,19 +133,16 @@ const setRound = (userToken) => {
   switch (roundResult) {
     case 0:
       roundResultInfo = "Round tied"
-      renderApp()
       break
     case 1:
       roundResultInfo = "Round loss"
       cpuScore += 1
       currentRound += 1
-      renderApp()
       break
     case 2:
       roundResultInfo = "Round won"
       userScore += 1
       currentRound += 1
-      renderApp()
       break
 
     default:
@@ -187,7 +186,7 @@ const setRound = (userToken) => {
 const playRound = (target) => {
   cpuRandomPlay()
   setRound(target, cpuPlay)
-  if (userPlay != null) userRandomPlay()
+  // if (userPlay != null) userRandomPlay()
 }
 
 // * EVENTS
