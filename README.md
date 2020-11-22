@@ -2,6 +2,8 @@
 
 Diseño de front end mentor modificado para cumplir con los requisitos de Dorian.
 
+## Live demo: [Rock-papper-scissors](https://manulopezayora.github.io/rock-paper-scissors/) 
+
 ![Design preview for the Rock, Paper, Scissors coding challenge](./design/desktop-preview.jpg)
 
 ## Diseño
